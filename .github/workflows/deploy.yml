@@ -18,6 +18,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # 1. Tambahkan QEMU supaya Ubuntu-Latest bisa nge-build ARM lewat emulasi
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -39,6 +43,8 @@ jobs:
         with:
           context: .
           push: true
+          # 2. Tentukan platform target di sini (AMD64 dan ARM64)
+          platforms: linux/amd64,linux/arm64
           tags: |
             ${{ env.IMAGE_NAME }}:latest
             ${{ env.IMAGE_NAME }}:${{ env.TAG }}
